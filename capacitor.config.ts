@@ -2,7 +2,7 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'app.lovable.93ba91210b6f43678fe540400261bbe5',
+  appId: 'com.habits.app',
   appName: 'badge-habit-tracker-flow',
   webDir: 'dist',
   bundledWebRuntime: false,
