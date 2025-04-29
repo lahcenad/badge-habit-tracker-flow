@@ -2,11 +2,13 @@
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip as RechartsTooltip, ResponsiveContainer, Cell } from 'recharts';
 import { format, subDays, parseISO } from 'date-fns';
 import { HabitLog, StatsPeriod } from '@/types';
 import { getHabitLogs, getHabits } from '@/utils/storageUtils';
 import { getCategoryName, getCategoryColor } from '@/utils/habitUtils';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface StatsProps {
   habitId?: string;
@@ -108,6 +110,7 @@ const Stats = ({ habitId }: StatsProps) => {
     setCategoryData(data);
   };
   
+  // Define the CustomTooltip component here to fix the reference error
   const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
@@ -142,7 +145,7 @@ const Stats = ({ habitId }: StatsProps) => {
           
           <TabsContent value="week" className="space-y-4">
             <CompletionRateCard rate={completionRate} />
-            <ChartCard data={chartData} />
+            <ChartCard data={chartData} customTooltip={CustomTooltip} />
             {!habitId && categoryData.length > 0 && (
               <CategoryBreakdownCard data={categoryData} />
             )}
@@ -150,7 +153,7 @@ const Stats = ({ habitId }: StatsProps) => {
           
           <TabsContent value="month" className="space-y-4">
             <CompletionRateCard rate={completionRate} />
-            <ChartCard data={chartData} />
+            <ChartCard data={chartData} customTooltip={CustomTooltip} />
             {!habitId && categoryData.length > 0 && (
               <CategoryBreakdownCard data={categoryData} />
             )}
@@ -158,7 +161,7 @@ const Stats = ({ habitId }: StatsProps) => {
           
           <TabsContent value="year" className="space-y-4">
             <CompletionRateCard rate={completionRate} />
-            <ChartCard data={chartData} />
+            <ChartCard data={chartData} customTooltip={CustomTooltip} />
             {!habitId && categoryData.length > 0 && (
               <CategoryBreakdownCard data={categoryData} />
             )}
@@ -181,7 +184,7 @@ const CompletionRateCard = ({ rate }: { rate: number }) => (
   </div>
 );
 
-const ChartCard = ({ data }: { data: LogData[] }) => (
+const ChartCard = ({ data, customTooltip }: { data: LogData[], customTooltip: React.ComponentType<any> }) => (
   <div className="bg-white rounded-lg">
     <p className="text-xs text-muted-foreground mb-2">Habit Completion</p>
     <div className="h-48">
@@ -194,7 +197,7 @@ const ChartCard = ({ data }: { data: LogData[] }) => (
             tickLine={false}
           />
           <YAxis hide />
-          <Tooltip content={<CustomTooltip />} />
+          <RechartsTooltip content={customTooltip} />
           <Bar 
             dataKey="count" 
             radius={[4, 4, 0, 0]} 
