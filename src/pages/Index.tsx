@@ -1,6 +1,5 @@
 
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Badge, Calendar as CalendarIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -17,7 +16,6 @@ import { enrichHabitsWithStats } from '@/utils/habitUtils';
 import { format } from 'date-fns';
 
 const Index = () => {
-  const navigate = useNavigate();
   const [habits, setHabits] = useState<HabitWithStats[]>([]);
   const [todayCompleted, setTodayCompleted] = useState(0);
   const [todayTotal, setTodayTotal] = useState(0);
@@ -96,7 +94,7 @@ const Index = () => {
                   variant="link" 
                   size="sm" 
                   className="px-0 text-xs" 
-                  onClick={() => navigate('/statistics')}
+                  onClick={() => window.location.href = '/statistics'}
                 >
                   View all stats
                 </Button>
@@ -119,7 +117,7 @@ const Index = () => {
                   variant="link" 
                   size="sm" 
                   className="px-0" 
-                  onClick={() => navigate('/achievements')}
+                  onClick={() => window.location.href = '/achievements'}
                 >
                   View all
                 </Button>
@@ -141,7 +139,7 @@ const Index = () => {
                   <TabsTrigger value="today">Today</TabsTrigger>
                   <TabsTrigger value="all">All Habits</TabsTrigger>
                 </TabsList>
-                <Button size="sm" variant="outline" onClick={() => navigate('/habits')}>
+                <Button size="sm" variant="outline" onClick={() => window.location.href = '/habits'}>
                   Manage Habits
                 </Button>
               </div>

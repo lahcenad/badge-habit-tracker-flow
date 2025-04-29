@@ -3,31 +3,54 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
-import Habits from "./pages/Habits";
-import Statistics from "./pages/Statistics";
-import Achievements from "./pages/Achievements";
-import NotFound from "./pages/NotFound";
 
+// Create a new query client instance
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/habits" element={<Habits />} />
-          <Route path="/statistics" element={<Statistics />} />
-          <Route path="/achievements" element={<Achievements />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+// Determine which page to render based on the URL path
+const getCurrentPage = () => {
+  const path = window.location.pathname;
+  
+  // Map paths to page components
+  switch (path) {
+    case "/habits":
+      return import("./pages/Habits").then(module => module.default);
+    case "/statistics":
+      return import("./pages/Statistics").then(module => module.default);
+    case "/achievements":
+      return import("./pages/Achievements").then(module => module.default);
+    case "/":
+      return Promise.resolve(Index);
+    default:
+      return import("./pages/NotFound").then(module => module.default);
+  }
+};
+
+const App = () => {
+  const [Page, setPage] = React.useState(() => Index);
+  
+  React.useEffect(() => {
+    getCurrentPage().then(setPage);
+    
+    // Handle navigation via popstate events (browser back/forward buttons)
+    const handlePopState = () => {
+      getCurrentPage().then(setPage);
+    };
+    
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+  
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <Page />
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;
