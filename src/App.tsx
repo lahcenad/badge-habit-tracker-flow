@@ -1,4 +1,5 @@
 
+import React, { useState, useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -28,9 +29,9 @@ const getCurrentPage = () => {
 };
 
 const App = () => {
-  const [Page, setPage] = React.useState(() => Index);
+  const [Page, setPage] = useState(() => Index);
   
-  React.useEffect(() => {
+  useEffect(() => {
     getCurrentPage().then(setPage);
     
     // Handle navigation via popstate events (browser back/forward buttons)
