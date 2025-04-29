@@ -9,46 +9,62 @@ import Index from "./pages/Index";
 // Create a new query client instance
 const queryClient = new QueryClient();
 
-// Determine which page to render based on the URL path
-const getCurrentPage = () => {
-  const path = window.location.pathname;
-  
-  // Map paths to page components
-  switch (path) {
-    case "/habits":
-      return import("./pages/Habits").then(module => module.default);
-    case "/statistics":
-      return import("./pages/Statistics").then(module => module.default);
-    case "/achievements":
-      return import("./pages/Achievements").then(module => module.default);
-    case "/":
-      return Promise.resolve(Index);
-    default:
-      return import("./pages/NotFound").then(module => module.default);
-  }
-};
-
 const App = () => {
-  const [Page, setPage] = useState(() => Index);
+  const [currentPage, setCurrentPage] = useState<React.ComponentType<any>>(Index);
   
   useEffect(() => {
-    getCurrentPage().then(setPage);
+    // Determine which page to render based on the URL path
+    const loadCurrentPage = async () => {
+      const path = window.location.pathname;
+      
+      // Map paths to page components
+      try {
+        switch (path) {
+          case "/habits":
+            const HabitsModule = await import("./pages/Habits");
+            setCurrentPage(() => HabitsModule.default);
+            break;
+          case "/statistics":
+            const StatisticsModule = await import("./pages/Statistics");
+            setCurrentPage(() => StatisticsModule.default);
+            break;
+          case "/achievements":
+            const AchievementsModule = await import("./pages/Achievements");
+            setCurrentPage(() => AchievementsModule.default);
+            break;
+          case "/":
+            setCurrentPage(() => Index);
+            break;
+          default:
+            const NotFoundModule = await import("./pages/NotFound");
+            setCurrentPage(() => NotFoundModule.default);
+            break;
+        }
+      } catch (error) {
+        console.error("Error loading page:", error);
+        setCurrentPage(() => Index); // Fallback to index if there's an error
+      }
+    };
+    
+    loadCurrentPage();
     
     // Handle navigation via popstate events (browser back/forward buttons)
     const handlePopState = () => {
-      getCurrentPage().then(setPage);
+      loadCurrentPage();
     };
     
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
   
+  const PageComponent = currentPage;
+  
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <Page />
+        <PageComponent />
       </TooltipProvider>
     </QueryClientProvider>
   );
