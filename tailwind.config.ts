@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,15 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				habit: {
+					health: '#ff6b6b',
+					work: '#4dabf7',
+					learning: '#51cf66',
+					social: '#fcc419',
+					creativity: '#da77f2',
+					mindfulness: '#9775fa',
+					finance: '#20c997'
 				}
 			},
 			borderRadius: {
@@ -84,11 +94,31 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'bounce-subtle': {
+					'0%, 100%': { transform: 'translateY(0)' },
+					'50%': { transform: 'translateY(-4px)' }
+				},
+				'scale-in': {
+					'0%': { transform: 'scale(0.95)', opacity: '0' },
+					'100%': { transform: 'scale(1)', opacity: '1' }
+				},
+				'fade-in': {
+					'0%': { opacity: '0' },
+					'100%': { opacity: '1' }
+				},
+				'check-mark': {
+					'0%': { strokeDashoffset: '20' },
+					'100%': { strokeDashoffset: '0' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'bounce-subtle': 'bounce-subtle 1s ease-in-out',
+				'scale-in': 'scale-in 0.2s ease-out',
+				'fade-in': 'fade-in 0.3s ease-out',
+				'check-mark': 'check-mark 0.3s ease-out forwards'
 			}
 		}
 	},
