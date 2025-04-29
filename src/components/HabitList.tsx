@@ -31,6 +31,11 @@ const HabitList = ({ category, onHabitsChange }: HabitListProps) => {
     
     const enrichedHabits = enrichHabitsWithStats(filteredHabits);
     setHabits(enrichedHabits);
+    
+    // Notify parent component that habits have changed
+    if (onHabitsChange) {
+      onHabitsChange();
+    }
   };
 
   useEffect(() => {
@@ -46,11 +51,6 @@ const HabitList = ({ category, onHabitsChange }: HabitListProps) => {
     setSelectedHabit(null);
     setIsDialogOpen(false);
     loadHabits();
-    
-    // Notify parent component that habits have changed
-    if (onHabitsChange) {
-      onHabitsChange();
-    }
   };
 
   const handleDeleteClick = (habitId: string) => {
@@ -60,29 +60,19 @@ const HabitList = ({ category, onHabitsChange }: HabitListProps) => {
 
   const handleDeleteConfirm = () => {
     if (habitToDelete) {
-      // Remove the habit from storage
       removeHabit(habitToDelete);
-      
-      // Show toast notification
       toast({
         title: "Habit deleted",
         description: "The habit has been removed from your list."
       });
-
-      // Reset the alert state
       setIsDeleteAlertOpen(false);
       setHabitToDelete(null);
-
-      // Refresh the local habits list
       loadHabits();
       
-      // Explicitly trigger parent refresh with a small delay to ensure state updates complete
-      setTimeout(() => {
-        if (onHabitsChange) {
-          console.log("Delete completed, triggering page refresh");
-          onHabitsChange();
-        }
-      }, 100);
+      // Notify parent about changes
+      if (onHabitsChange) {
+        onHabitsChange();
+      }
     }
   };
 
