@@ -1,5 +1,4 @@
 
-// src/pages/Habits.tsx
 import { useState, useEffect, useCallback } from 'react';
 import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -186,12 +185,12 @@ const Habits = () => {
       <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <span className="text-sm font-medium">Filter:</span>
-          <Select value={selectedCategory || ''} onValueChange={(value) => setSelectedCategory(value || null)}>
+          <Select value={selectedCategory || 'all'} onValueChange={(value) => setSelectedCategory(value === 'all' ? null : value)}>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="All Categories" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All Categories</SelectItem>
+              <SelectItem value="all">All Categories</SelectItem>
               <SelectItem value="health">Health</SelectItem>
               <SelectItem value="work">Work</SelectItem>
               <SelectItem value="personal">Personal</SelectItem>
