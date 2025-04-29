@@ -1,5 +1,6 @@
 
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import HabitForm from '@/components/HabitForm';
@@ -13,6 +14,7 @@ interface NavbarProps {
 
 const Navbar = ({ title, showBackButton = false, onBack }: NavbarProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const navigate = useNavigate();
   const currentPath = window.location.pathname;
   
   const closeDialog = () => {
@@ -23,7 +25,7 @@ const Navbar = ({ title, showBackButton = false, onBack }: NavbarProps) => {
     if (onBack) {
       onBack();
     } else {
-      window.history.back();
+      navigate(-1);
     }
   };
   

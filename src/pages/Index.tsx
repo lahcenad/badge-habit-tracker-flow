@@ -1,5 +1,6 @@
 
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Badge, Calendar as CalendarIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -94,9 +95,9 @@ const Index = () => {
                   variant="link" 
                   size="sm" 
                   className="px-0 text-xs" 
-                  onClick={() => window.location.href = '/statistics'}
+                  asChild
                 >
-                  View all stats
+                  <Link to="/statistics">View all stats</Link>
                 </Button>
               )}
             </CardContent>
@@ -117,9 +118,9 @@ const Index = () => {
                   variant="link" 
                   size="sm" 
                   className="px-0" 
-                  onClick={() => window.location.href = '/achievements'}
+                  asChild
                 >
-                  View all
+                  <Link to="/achievements">View all</Link>
                 </Button>
               </div>
             </CardContent>
@@ -139,8 +140,8 @@ const Index = () => {
                   <TabsTrigger value="today">Today</TabsTrigger>
                   <TabsTrigger value="all">All Habits</TabsTrigger>
                 </TabsList>
-                <Button size="sm" variant="outline" onClick={() => window.location.href = '/habits'}>
-                  Manage Habits
+                <Button size="sm" variant="outline" asChild>
+                  <Link to="/habits">Manage Habits</Link>
                 </Button>
               </div>
               

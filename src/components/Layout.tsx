@@ -1,5 +1,6 @@
 
 import { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { Home, BarChart, Award, CheckCheck, Plus, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -13,7 +14,8 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const currentPath = window.location.pathname;
+  const location = useLocation();
+  const currentPath = location.pathname;
   
   useEffect(() => {
     initializeDefaultData();
@@ -23,24 +25,19 @@ const Layout = ({ children }: LayoutProps) => {
     setIsDialogOpen(false);
   };
 
-  // Navigate to a page (traditional navigation)
-  const navigateTo = (path: string) => {
-    window.location.href = path;
-  };
-
   return (
     <div className="flex min-h-screen bg-background">
       {/* Mobile bottom navigation */}
       <div className="fixed bottom-0 w-full border-t bg-background z-20 sm:hidden">
         <nav className="flex justify-around py-2">
-          <NavLink href="/" icon={<Home className="w-5 h-5" />} label="Home" isActive={currentPath === '/'} />
-          <NavLink href="/habits" icon={<CheckCheck className="w-5 h-5" />} label="Habits" isActive={currentPath === '/habits'} />
+          <NavLink to="/" icon={<Home className="w-5 h-5" />} label="Home" isActive={currentPath === '/'} />
+          <NavLink to="/habits" icon={<CheckCheck className="w-5 h-5" />} label="Habits" isActive={currentPath === '/habits'} />
           <NavButton
             onClick={() => setIsDialogOpen(true)}
             icon={<Plus className="w-5 h-5" />}
           />
-          <NavLink href="/statistics" icon={<BarChart className="w-5 h-5" />} label="Stats" isActive={currentPath === '/statistics'} />
-          <NavLink href="/achievements" icon={<Award className="w-5 h-5" />} label="Badges" isActive={currentPath === '/achievements'} />
+          <NavLink to="/statistics" icon={<BarChart className="w-5 h-5" />} label="Stats" isActive={currentPath === '/statistics'} />
+          <NavLink to="/achievements" icon={<Award className="w-5 h-5" />} label="Badges" isActive={currentPath === '/achievements'} />
         </nav>
       </div>
 
@@ -51,10 +48,10 @@ const Layout = ({ children }: LayoutProps) => {
           <h1 className="text-xl font-bold">Habit Flow</h1>
         </div>
         <nav className="space-y-2 flex-1">
-          <SidebarLink href="/" icon={<Home className="w-5 h-5" />} label="Dashboard" isActive={currentPath === '/'} />
-          <SidebarLink href="/habits" icon={<CheckCheck className="w-5 h-5" />} label="Manage Habits" isActive={currentPath === '/habits'} />
-          <SidebarLink href="/statistics" icon={<BarChart className="w-5 h-5" />} label="Statistics" isActive={currentPath === '/statistics'} />
-          <SidebarLink href="/achievements" icon={<Award className="w-5 h-5" />} label="Achievements" isActive={currentPath === '/achievements'} />
+          <SidebarLink to="/" icon={<Home className="w-5 h-5" />} label="Dashboard" isActive={currentPath === '/'} />
+          <SidebarLink to="/habits" icon={<CheckCheck className="w-5 h-5" />} label="Manage Habits" isActive={currentPath === '/habits'} />
+          <SidebarLink to="/statistics" icon={<BarChart className="w-5 h-5" />} label="Statistics" isActive={currentPath === '/statistics'} />
+          <SidebarLink to="/achievements" icon={<Award className="w-5 h-5" />} label="Achievements" isActive={currentPath === '/achievements'} />
         </nav>
         <Button onClick={() => setIsDialogOpen(true)} className="w-full">
           <Plus className="mr-2 h-4 w-4" />
@@ -80,15 +77,15 @@ const Layout = ({ children }: LayoutProps) => {
 };
 
 interface NavLinkProps {
-  href: string;
+  to: string;
   icon: React.ReactNode;
   label: string;
   isActive: boolean;
 }
 
-const NavLink = ({ href, icon, label, isActive }: NavLinkProps) => (
-  <a 
-    href={href}
+const NavLink = ({ to, icon, label, isActive }: NavLinkProps) => (
+  <Link 
+    to={to}
     className={cn(
       "flex flex-col items-center justify-center px-2 py-1 rounded-md text-xs",
       isActive ? "text-primary" : "text-muted-foreground hover:text-primary"
@@ -96,7 +93,7 @@ const NavLink = ({ href, icon, label, isActive }: NavLinkProps) => (
   >
     <div className="mb-1">{icon}</div>
     {label}
-  </a>
+  </Link>
 );
 
 interface NavButtonProps {
@@ -115,9 +112,9 @@ const NavButton = ({ onClick, icon }: NavButtonProps) => (
   </button>
 );
 
-const SidebarLink = ({ href, icon, label, isActive }: NavLinkProps) => (
-  <a
-    href={href}
+const SidebarLink = ({ to, icon, label, isActive }: NavLinkProps) => (
+  <Link
+    to={to}
     className={cn(
       "flex items-center gap-3 px-3 py-2 rounded-md transition-colors",
       isActive 
@@ -127,7 +124,7 @@ const SidebarLink = ({ href, icon, label, isActive }: NavLinkProps) => (
   >
     {icon}
     <span>{label}</span>
-  </a>
+  </Link>
 );
 
 export default Layout;

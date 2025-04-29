@@ -1,5 +1,6 @@
 
-import React, { useState, useEffect } from "react";
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -14,50 +15,20 @@ import NotFound from "./pages/NotFound";
 const queryClient = new QueryClient();
 
 const App = () => {
-  const [CurrentPage, setCurrentPage] = useState<React.ComponentType>(() => Index);
-  
-  useEffect(() => {
-    // Determine which page to render based on the URL path
-    const loadCurrentPage = () => {
-      const path = window.location.pathname;
-      
-      // Map paths to page components
-      switch (path) {
-        case "/habits":
-          setCurrentPage(() => Habits);
-          break;
-        case "/statistics":
-          setCurrentPage(() => Statistics);
-          break;
-        case "/achievements":
-          setCurrentPage(() => Achievements);
-          break;
-        case "/":
-          setCurrentPage(() => Index);
-          break;
-        default:
-          setCurrentPage(() => NotFound);
-          break;
-      }
-    };
-    
-    loadCurrentPage();
-    
-    // Handle navigation via popstate events (browser back/forward buttons)
-    const handlePopState = () => {
-      loadCurrentPage();
-    };
-    
-    window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
-  }, []);
-  
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <CurrentPage />
+        <Router>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/habits" element={<Habits />} />
+            <Route path="/statistics" element={<Statistics />} />
+            <Route path="/achievements" element={<Achievements />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+          <Toaster />
+          <Sonner />
+        </Router>
       </TooltipProvider>
     </QueryClientProvider>
   );

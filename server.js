@@ -8,6 +8,7 @@ const PORT = process.env.PORT || 8080;
 app.use(express.static(path.join(__dirname, 'dist')));
 
 // Any routes should serve the index.html file
+// This is crucial for client-side routing to work
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
