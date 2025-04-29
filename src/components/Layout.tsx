@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import HabitForm from '@/components/HabitForm';
 import { initializeDefaultData } from '@/utils/storageUtils';
+import MainNav from '@/components/MainNav';
 
 interface LayoutProps {
   children: React.ReactNode;
