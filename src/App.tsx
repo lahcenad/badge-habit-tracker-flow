@@ -10,7 +10,7 @@ import Index from "./pages/Index";
 const queryClient = new QueryClient();
 
 const App = () => {
-  const [currentPage, setCurrentPage] = useState<React.ComponentType<any>>(Index);
+  const [CurrentPage, setCurrentPage] = useState<React.ComponentType>(() => Index);
   
   useEffect(() => {
     // Determine which page to render based on the URL path
@@ -57,14 +57,12 @@ const App = () => {
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
   
-  const PageComponent = currentPage;
-  
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <PageComponent />
+        <CurrentPage />
       </TooltipProvider>
     </QueryClientProvider>
   );
