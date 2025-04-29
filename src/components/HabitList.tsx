@@ -12,10 +12,9 @@ import { useToast } from '@/components/ui/use-toast';
 
 interface HabitListProps {
   category?: string;
-  onHabitsChange?: () => void;
 }
 
-const HabitList = ({ category, onHabitsChange }: HabitListProps) => {
+const HabitList = ({ category }: HabitListProps) => {
   const { toast } = useToast();
   const [habits, setHabits] = useState<HabitWithStats[]>([]);
   const [selectedHabit, setSelectedHabit] = useState<HabitWithStats | null>(null);
@@ -31,11 +30,6 @@ const HabitList = ({ category, onHabitsChange }: HabitListProps) => {
     
     const enrichedHabits = enrichHabitsWithStats(filteredHabits);
     setHabits(enrichedHabits);
-    
-    // Notify parent component that habits have changed
-    if (onHabitsChange) {
-      onHabitsChange();
-    }
   };
 
   useEffect(() => {
@@ -68,11 +62,6 @@ const HabitList = ({ category, onHabitsChange }: HabitListProps) => {
       setIsDeleteAlertOpen(false);
       setHabitToDelete(null);
       loadHabits();
-      
-      // Notify parent about changes
-      if (onHabitsChange) {
-        onHabitsChange();
-      }
     }
   };
 
@@ -89,10 +78,7 @@ const HabitList = ({ category, onHabitsChange }: HabitListProps) => {
             habit={habit}
             onEdit={handleEdit}
             onDelete={handleDeleteClick}
-            onToggle={() => {
-              loadHabits();
-              if (onHabitsChange) onHabitsChange();
-            }}
+            onToggle={loadHabits}
           />
         ))
       )}

@@ -31,7 +31,6 @@ const Habits = () => {
   }, []);
   
   const loadHabits = () => {
-    console.log("Loading habits...");
     const allHabits = getHabits();
     const enrichedHabits = enrichHabitsWithStats(allHabits);
     setHabits(enrichedHabits);
@@ -52,7 +51,7 @@ const Habits = () => {
   
   const closeDialog = () => {
     setIsDialogOpen(false);
-    loadHabits(); // Reload habits when dialog closes
+    loadHabits();
   };
 
   return (
@@ -91,10 +90,7 @@ const Habits = () => {
         </div>
         
         <div className="space-y-3">
-          <HabitList 
-            category={selectedCategory || undefined} 
-            onHabitsChange={loadHabits}
-          />
+          <HabitList category={selectedCategory || undefined} />
         </div>
       </div>
       

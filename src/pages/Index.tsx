@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Badge, Calendar as CalendarIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -17,6 +17,7 @@ import { enrichHabitsWithStats } from '@/utils/habitUtils';
 import { format } from 'date-fns';
 
 const Index = () => {
+  const navigate = useNavigate();
   const [habits, setHabits] = useState<HabitWithStats[]>([]);
   const [todayCompleted, setTodayCompleted] = useState(0);
   const [todayTotal, setTodayTotal] = useState(0);
@@ -95,9 +96,9 @@ const Index = () => {
                   variant="link" 
                   size="sm" 
                   className="px-0 text-xs" 
-                  asChild
+                  onClick={() => navigate('/statistics')}
                 >
-                  <Link to="/statistics">View all stats</Link>
+                  View all stats
                 </Button>
               )}
             </CardContent>
@@ -118,9 +119,9 @@ const Index = () => {
                   variant="link" 
                   size="sm" 
                   className="px-0" 
-                  asChild
+                  onClick={() => navigate('/achievements')}
                 >
-                  <Link to="/achievements">View all</Link>
+                  View all
                 </Button>
               </div>
             </CardContent>
@@ -140,8 +141,8 @@ const Index = () => {
                   <TabsTrigger value="today">Today</TabsTrigger>
                   <TabsTrigger value="all">All Habits</TabsTrigger>
                 </TabsList>
-                <Button size="sm" variant="outline" asChild>
-                  <Link to="/habits">Manage Habits</Link>
+                <Button size="sm" variant="outline" onClick={() => navigate('/habits')}>
+                  Manage Habits
                 </Button>
               </div>
               

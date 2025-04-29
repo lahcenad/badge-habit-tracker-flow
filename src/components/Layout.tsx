@@ -13,9 +13,8 @@ interface LayoutProps {
 }
 
 const Layout = ({ children }: LayoutProps) => {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const location = useLocation();
-  const currentPath = location.pathname;
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   
   useEffect(() => {
     initializeDefaultData();
@@ -30,14 +29,14 @@ const Layout = ({ children }: LayoutProps) => {
       {/* Mobile bottom navigation */}
       <div className="fixed bottom-0 w-full border-t bg-background z-20 sm:hidden">
         <nav className="flex justify-around py-2">
-          <NavLink to="/" icon={<Home className="w-5 h-5" />} label="Home" isActive={currentPath === '/'} />
-          <NavLink to="/habits" icon={<CheckCheck className="w-5 h-5" />} label="Habits" isActive={currentPath === '/habits'} />
+          <NavLink to="/" icon={<Home className="w-5 h-5" />} label="Home" isActive={location.pathname === '/'} />
+          <NavLink to="/habits" icon={<CheckCheck className="w-5 h-5" />} label="Habits" isActive={location.pathname === '/habits'} />
           <NavButton
             onClick={() => setIsDialogOpen(true)}
             icon={<Plus className="w-5 h-5" />}
           />
-          <NavLink to="/statistics" icon={<BarChart className="w-5 h-5" />} label="Stats" isActive={currentPath === '/statistics'} />
-          <NavLink to="/achievements" icon={<Award className="w-5 h-5" />} label="Badges" isActive={currentPath === '/achievements'} />
+          <NavLink to="/statistics" icon={<BarChart className="w-5 h-5" />} label="Stats" isActive={location.pathname === '/statistics'} />
+          <NavLink to="/achievements" icon={<Award className="w-5 h-5" />} label="Badges" isActive={location.pathname === '/achievements'} />
         </nav>
       </div>
 
@@ -48,10 +47,10 @@ const Layout = ({ children }: LayoutProps) => {
           <h1 className="text-xl font-bold">Habit Flow</h1>
         </div>
         <nav className="space-y-2 flex-1">
-          <SidebarLink to="/" icon={<Home className="w-5 h-5" />} label="Dashboard" isActive={currentPath === '/'} />
-          <SidebarLink to="/habits" icon={<CheckCheck className="w-5 h-5" />} label="Manage Habits" isActive={currentPath === '/habits'} />
-          <SidebarLink to="/statistics" icon={<BarChart className="w-5 h-5" />} label="Statistics" isActive={currentPath === '/statistics'} />
-          <SidebarLink to="/achievements" icon={<Award className="w-5 h-5" />} label="Achievements" isActive={currentPath === '/achievements'} />
+          <SidebarLink to="/" icon={<Home className="w-5 h-5" />} label="Dashboard" isActive={location.pathname === '/'} />
+          <SidebarLink to="/habits" icon={<CheckCheck className="w-5 h-5" />} label="Manage Habits" isActive={location.pathname === '/habits'} />
+          <SidebarLink to="/statistics" icon={<BarChart className="w-5 h-5" />} label="Statistics" isActive={location.pathname === '/statistics'} />
+          <SidebarLink to="/achievements" icon={<Award className="w-5 h-5" />} label="Achievements" isActive={location.pathname === '/achievements'} />
         </nav>
         <Button onClick={() => setIsDialogOpen(true)} className="w-full">
           <Plus className="mr-2 h-4 w-4" />
@@ -85,7 +84,7 @@ interface NavLinkProps {
 
 const NavLink = ({ to, icon, label, isActive }: NavLinkProps) => (
   <Link 
-    to={to}
+    to={to} 
     className={cn(
       "flex flex-col items-center justify-center px-2 py-1 rounded-md text-xs",
       isActive ? "text-primary" : "text-muted-foreground hover:text-primary"

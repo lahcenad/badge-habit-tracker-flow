@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -43,14 +44,6 @@
     --sidebar-border: 260 20% 25%;
     --sidebar-ring: 260 60% 55%;
   }
-
-  /* Add additional variables for mobile devices */
-  .capacitor-app {
-    --safe-area-top: env(safe-area-inset-top);
-    --safe-area-bottom: env(safe-area-inset-bottom);
-    --safe-area-left: env(safe-area-inset-left);
-    --safe-area-right: env(safe-area-inset-right);
-  }
 }
 
 @layer base {
@@ -60,13 +53,6 @@
 
   body {
     @apply bg-background text-foreground;
-  }
-
-  /* Mobile-specific adjustments */
-  .capacitor-app body {
-    @apply overscroll-none;
-    -webkit-tap-highlight-color: transparent;
-    -webkit-touch-callout: none;
   }
 }
 
@@ -103,19 +89,5 @@
   
   .check-animation.checked path {
     @apply animate-check-mark;
-  }
-}
-
-/* Mobile enhancements */
-@layer components {
-  /* Adjust bottom navigation for devices with home indicator */
-  .capacitor-app .fixed.bottom-0 {
-    padding-bottom: var(--safe-area-bottom, 0);
-  }
-  
-  /* Improve touch targets for mobile */
-  .capacitor-app button, 
-  .capacitor-app a {
-    @apply min-h-10 min-w-10;
   }
 }
