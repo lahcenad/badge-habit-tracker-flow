@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -27,11 +27,7 @@ const Habits = () => {
   const [categories, setCategories] = useState<{value: string, label: string}[]>([]);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   
-  useEffect(() => {
-    loadHabits();
-  }, [refreshTrigger]);
-  
-  const loadHabits = () => {
+  const loadHabits = useCallback(() => {
     console.log("Loading habits...");
     const allHabits = getHabits();
     const enrichedHabits = enrichHabitsWithStats(allHabits);
@@ -45,7 +41,11 @@ const Habits = () => {
     }));
     
     setCategories(categoryOptions);
-  };
+  }, []);
+  
+  useEffect(() => {
+    loadHabits();
+  }, [loadHabits, refreshTrigger]);
   
   const handleCategoryChange = (value: string) => {
     setSelectedCategory(value === 'all' ? null : value);
@@ -57,11 +57,11 @@ const Habits = () => {
   };
 
   // Force a full refresh of the component
-  const forceRefresh = () => {
+  const forceRefresh = useCallback(() => {
     console.log("Force refreshing habits page");
+    // Increment the refresh trigger to force a re-render
     setRefreshTrigger(prev => prev + 1);
-    loadHabits();
-  };
+  }, []);
 
   return (
     <Layout>
