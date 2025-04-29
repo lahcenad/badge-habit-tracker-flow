@@ -1,3 +1,4 @@
+
 // src/pages/Habits.tsx
 import { useState, useEffect, useCallback } from 'react';
 import { Plus } from 'lucide-react';
@@ -12,6 +13,8 @@ import {
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import Layout from '@/components/Layout';
 import Navbar from '@/components/Navbar';
+import HabitList from '@/components/HabitList';
+import { useToast } from '@/components/ui/use-toast';
 
 // Types
 interface Habit {
@@ -78,4 +81,146 @@ interface HabitFormProps {
 }
 
 const HabitForm = ({ onClose, habit }: HabitFormProps) => {
-  const [name, setName] = useState(h
+  const [name, setName] = useState(habit?.name || '');
+  const [category, setCategory] = useState<Category>((habit?.category as Category) || 'health');
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!name.trim()) {
+      return; // Don't submit empty habits
+    }
+    
+    const updatedHabit: Habit = habit 
+      ? { ...habit, name, category }
+      : { 
+          id: `habit_${Date.now()}`,
+          name,
+          category
+        };
+        
+    if (habit) {
+      storageUtils.updateHabit(updatedHabit);
+    } else {
+      storageUtils.saveHabit(updatedHabit);
+    }
+    
+    onClose();
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <h2 className="text-lg font-semibold">{habit ? 'Edit Habit' : 'New Habit'}</h2>
+      
+      <div className="space-y-2">
+        <label htmlFor="habit-name" className="block text-sm font-medium">
+          Habit Name
+        </label>
+        <input
+          id="habit-name"
+          type="text"
+          className="w-full border rounded-md p-2"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Enter habit name"
+          required
+        />
+      </div>
+      
+      <div className="space-y-2">
+        <label htmlFor="habit-category" className="block text-sm font-medium">
+          Category
+        </label>
+        <Select value={category} onValueChange={(value) => setCategory(value as Category)}>
+          <SelectTrigger>
+            <SelectValue placeholder="Select category" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="health">Health</SelectItem>
+            <SelectItem value="work">Work</SelectItem>
+            <SelectItem value="personal">Personal</SelectItem>
+            <SelectItem value="other">Other</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+      
+      <div className="flex justify-end space-x-2 pt-4">
+        <Button variant="outline" type="button" onClick={onClose}>
+          Cancel
+        </Button>
+        <Button type="submit">
+          {habit ? 'Update' : 'Create'}
+        </Button>
+      </div>
+    </form>
+  );
+};
+
+// Main Habits Component
+const Habits = () => {
+  const { toast } = useToast();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [habits, setHabits] = useState<Habit[]>([]);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+
+  const loadHabits = useCallback(() => {
+    console.log("Loading habits...");
+    const allHabits = storageUtils.getHabits();
+    setHabits(allHabits);
+  }, []);
+
+  const forceRefresh = useCallback(() => {
+    setRefreshTrigger(prev => prev + 1);
+    loadHabits();
+  }, [loadHabits]);
+
+  useEffect(() => {
+    loadHabits();
+  }, [loadHabits, refreshTrigger]);
+
+  return (
+    <Layout>
+      <Navbar title="Manage Habits" />
+      
+      <div className="mb-6 flex items-center justify-between">
+        <div className="flex items-center space-x-2">
+          <span className="text-sm font-medium">Filter:</span>
+          <Select value={selectedCategory || ''} onValueChange={(value) => setSelectedCategory(value || null)}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="All Categories" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="">All Categories</SelectItem>
+              <SelectItem value="health">Health</SelectItem>
+              <SelectItem value="work">Work</SelectItem>
+              <SelectItem value="personal">Personal</SelectItem>
+              <SelectItem value="other">Other</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        
+        <Button onClick={() => setIsDialogOpen(true)}>
+          <Plus className="mr-2 h-4 w-4" />
+          New Habit
+        </Button>
+      </div>
+      
+      <HabitList 
+        category={selectedCategory} 
+        onHabitsChange={forceRefresh}
+      />
+      
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <HabitForm onClose={() => {
+            setIsDialogOpen(false);
+            forceRefresh();
+          }} />
+        </DialogContent>
+      </Dialog>
+    </Layout>
+  );
+};
+
+export default Habits;
