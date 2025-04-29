@@ -90,7 +90,10 @@ const Habits = () => {
         </div>
         
         <div className="space-y-3">
-          <HabitList category={selectedCategory || undefined} />
+          <HabitList 
+            category={selectedCategory || undefined} 
+            onHabitsChange={loadHabits}
+          />
         </div>
       </div>
       
