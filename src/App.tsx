@@ -5,6 +5,10 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Index from "./pages/Index";
+import Habits from "./pages/Habits";
+import Statistics from "./pages/Statistics";
+import Achievements from "./pages/Achievements";
+import NotFound from "./pages/NotFound";
 
 // Create a new query client instance
 const queryClient = new QueryClient();
@@ -14,35 +18,26 @@ const App = () => {
   
   useEffect(() => {
     // Determine which page to render based on the URL path
-    const loadCurrentPage = async () => {
+    const loadCurrentPage = () => {
       const path = window.location.pathname;
       
       // Map paths to page components
-      try {
-        switch (path) {
-          case "/habits":
-            const HabitsModule = await import("./pages/Habits");
-            setCurrentPage(() => HabitsModule.default);
-            break;
-          case "/statistics":
-            const StatisticsModule = await import("./pages/Statistics");
-            setCurrentPage(() => StatisticsModule.default);
-            break;
-          case "/achievements":
-            const AchievementsModule = await import("./pages/Achievements");
-            setCurrentPage(() => AchievementsModule.default);
-            break;
-          case "/":
-            setCurrentPage(() => Index);
-            break;
-          default:
-            const NotFoundModule = await import("./pages/NotFound");
-            setCurrentPage(() => NotFoundModule.default);
-            break;
-        }
-      } catch (error) {
-        console.error("Error loading page:", error);
-        setCurrentPage(() => Index); // Fallback to index if there's an error
+      switch (path) {
+        case "/habits":
+          setCurrentPage(() => Habits);
+          break;
+        case "/statistics":
+          setCurrentPage(() => Statistics);
+          break;
+        case "/achievements":
+          setCurrentPage(() => Achievements);
+          break;
+        case "/":
+          setCurrentPage(() => Index);
+          break;
+        default:
+          setCurrentPage(() => NotFound);
+          break;
       }
     };
     
