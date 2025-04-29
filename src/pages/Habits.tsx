@@ -25,10 +25,11 @@ const Habits = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [habits, setHabits] = useState<HabitWithStats[]>([]);
   const [categories, setCategories] = useState<{value: string, label: string}[]>([]);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
   
   useEffect(() => {
     loadHabits();
-  }, []);
+  }, [refreshTrigger]);
   
   const loadHabits = () => {
     console.log("Loading habits...");
@@ -53,6 +54,13 @@ const Habits = () => {
   const closeDialog = () => {
     setIsDialogOpen(false);
     loadHabits(); // Reload habits when dialog closes
+  };
+
+  // Force a full refresh of the component
+  const forceRefresh = () => {
+    console.log("Force refreshing habits page");
+    setRefreshTrigger(prev => prev + 1);
+    loadHabits();
   };
 
   return (
@@ -93,7 +101,7 @@ const Habits = () => {
         <div className="space-y-3">
           <HabitList 
             category={selectedCategory || undefined} 
-            onHabitsChange={loadHabits}
+            onHabitsChange={forceRefresh}
           />
         </div>
       </div>

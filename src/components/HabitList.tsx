@@ -65,13 +65,18 @@ const HabitList = ({ category, onHabitsChange }: HabitListProps) => {
         title: "Habit deleted",
         description: "The habit has been removed from your list."
       });
+      
+      // First reset the alert state
       setIsDeleteAlertOpen(false);
       setHabitToDelete(null);
+      
+      // Then force refresh habits
       loadHabits();
       
-      // Notify parent about changes
+      // Explicitly notify parent about changes to trigger a full refresh
       if (onHabitsChange) {
         onHabitsChange();
+        console.log("Delete completed, triggering page refresh");
       }
     }
   };
