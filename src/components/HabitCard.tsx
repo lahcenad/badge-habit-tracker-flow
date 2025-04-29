@@ -31,6 +31,8 @@ const HabitCard = ({ habit, onEdit, onDelete, onToggle }: HabitCardProps) => {
     setIsChecking(true);
     try {
       toggleHabitCompletion(habit.id);
+      
+      // Trigger the callback to refresh the parent components
       onToggle();
       
       if (!habit.todayCompleted) {

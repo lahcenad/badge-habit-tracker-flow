@@ -68,6 +68,11 @@ const HabitList = ({ category, onHabitsChange }: HabitListProps) => {
       setIsDeleteAlertOpen(false);
       setHabitToDelete(null);
       loadHabits();
+      
+      // Notify parent about changes
+      if (onHabitsChange) {
+        onHabitsChange();
+      }
     }
   };
 
@@ -84,7 +89,10 @@ const HabitList = ({ category, onHabitsChange }: HabitListProps) => {
             habit={habit}
             onEdit={handleEdit}
             onDelete={handleDeleteClick}
-            onToggle={loadHabits}
+            onToggle={() => {
+              loadHabits();
+              if (onHabitsChange) onHabitsChange();
+            }}
           />
         ))
       )}

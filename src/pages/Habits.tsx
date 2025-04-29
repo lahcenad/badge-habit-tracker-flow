@@ -31,6 +31,7 @@ const Habits = () => {
   }, []);
   
   const loadHabits = () => {
+    console.log("Loading habits...");
     const allHabits = getHabits();
     const enrichedHabits = enrichHabitsWithStats(allHabits);
     setHabits(enrichedHabits);
@@ -51,7 +52,7 @@ const Habits = () => {
   
   const closeDialog = () => {
     setIsDialogOpen(false);
-    loadHabits();
+    loadHabits(); // Reload habits when dialog closes
   };
 
   return (

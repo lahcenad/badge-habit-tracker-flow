@@ -81,6 +81,7 @@ const HabitForm = ({ habit, onClose }: HabitFormProps) => {
           description: `${values.name} has been added to your habits.`,
         });
       }
+      // Make sure to close dialog and trigger refresh
       onClose();
     } catch (error) {
       toast({
