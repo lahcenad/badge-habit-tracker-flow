@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -19,6 +18,26 @@ interface LogData {
   rate: number;
   formattedDate: string;
 }
+
+// Move CustomTooltip out of the Stats component so it can be used by other components
+const CustomTooltip = ({ active, payload }: any) => {
+  if (active && payload && payload.length) {
+    const data = payload[0].payload;
+    return (
+      <div className="bg-white p-3 border rounded-md shadow-sm">
+        <p className="text-sm font-semibold">{data.formattedDate}</p>
+        <p className="text-sm text-muted-foreground">
+          {data.count} of {data.total} habits completed
+        </p>
+        <p className="text-sm font-medium text-primary">
+          {data.rate}% completion
+        </p>
+      </div>
+    );
+  }
+  
+  return null;
+};
 
 const Stats = ({ habitId }: StatsProps) => {
   const [selectedPeriod, setSelectedPeriod] = useState<StatsPeriod>('week');
@@ -108,25 +127,6 @@ const Stats = ({ habitId }: StatsProps) => {
     setCategoryData(data);
   };
   
-  const CustomTooltip = ({ active, payload }: any) => {
-    if (active && payload && payload.length) {
-      const data = payload[0].payload;
-      return (
-        <div className="bg-white p-3 border rounded-md shadow-sm">
-          <p className="text-sm font-semibold">{data.formattedDate}</p>
-          <p className="text-sm text-muted-foreground">
-            {data.count} of {data.total} habits completed
-          </p>
-          <p className="text-sm font-medium text-primary">
-            {data.rate}% completion
-          </p>
-        </div>
-      );
-    }
-    
-    return null;
-  };
-
   return (
     <Card>
       <CardHeader className="pb-2">
